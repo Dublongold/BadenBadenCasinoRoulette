@@ -1,0 +1,50 @@
+package com.garantied_win.in_game.baned_banden_casino_roulette.fragments
+
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.LayoutRes
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.allViews
+import androidx.fragment.app.Fragment
+import com.garantied_win.in_game.baned_banden_casino_roulette.R
+
+abstract class ParentFragment : Fragment() {
+    abstract val layoutId: Int
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(layoutId, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val goldTextTag = getString(R.string.gold_text_tag)
+        view.allViews.filter {
+            "${it.tag}".contains(goldTextTag)
+        }.map {
+            it as? TextView
+        }.forEach {
+            if(it != null) {
+                it.paint.shader = LinearGradient(
+                    /*x0*/0f,
+                    /*y0*/0f ,
+                    /*x1*/0f,
+                    /*y1*/it.textSize,
+                    /*color0*/ResourcesCompat.getColor(resources, R.color.gold_start, null),
+                    /*color1*/ResourcesCompat.getColor(resources, R.color.gold_end, null),
+                    /*tile*/Shader.TileMode.CLAMP
+                )
+            }
+        }
+    }
+}

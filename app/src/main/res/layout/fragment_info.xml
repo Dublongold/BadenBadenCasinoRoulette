@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/rounded_button"
+            app:srcCompat="@drawable/icon_back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/info_element"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center"
+            android:text="@string/info_title"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/info_element"
+        android:padding="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="@string/info_text"
+            android:textColor="@color/white"/>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
