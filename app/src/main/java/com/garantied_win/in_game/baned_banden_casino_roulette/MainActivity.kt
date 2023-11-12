@@ -2,12 +2,15 @@ package com.garantied_win.in_game.baned_banden_casino_roulette
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import com.garantied_win.in_game.baned_banden_casino_roulette.fragments.with_view_model.view_models.GameViewModel
-import com.garantied_win.in_game.baned_banden_casino_roulette.objects.GameDataManager
 import com.garantied_win.in_game.baned_banden_casino_roulette.objects.GameFileManager
+import com.onesignal.OneSignal
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
@@ -23,8 +26,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val gameFileManager = GameFileManager()
-        val gameDataManager = GameDataManager()
-        gameDataManager.setStartBank(gameFileManager.getBank(this))
 
         if(GlobalContext.getKoinApplicationOrNull() == null) {
             startKoin {
@@ -34,11 +35,14 @@ class MainActivity : AppCompatActivity() {
                         single {
                             gameFileManager
                         }
-                        single {
-                            gameDataManager
-                        }
                     }
                 )
+            }
+        }
+        if (!OneSignal.isInitialized) {
+            OneSignal.initWithContext(this) // TODO Here must be OneSignal ID.
+            CoroutineScope(Dispatchers.Main).launch {
+                OneSignal.Notifications.requestPermission(true)
             }
         }
     }

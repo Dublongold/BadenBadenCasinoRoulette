@@ -50,4 +50,6 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.5.0")
 
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+
+    implementation("com.onesignal:OneSignal:5.0.2")
 }

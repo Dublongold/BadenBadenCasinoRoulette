@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GameDataEntity (
-    val bank: Int,
+    var bank: Int,
+    var requested: Boolean
 )
