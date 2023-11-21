@@ -1,14 +1,17 @@
 package com.garantied_win.in_game.baned_banden_casino_roulette.fragments.with_view_model.view_models
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.garantied_win.in_game.baned_banden_casino_roulette.objects.GameFileManager
 import com.garantied_win.in_game.baned_banden_casino_roulette.objects.GameState
+import com.garantied_win.in_game.baned_banden_casino_roulette.objects.GameWinContainer
 import com.garantied_win.in_game.baned_banden_casino_roulette.useful.getValueOrDefault
 import com.garantied_win.in_game.baned_banden_casino_roulette.useful.update
 import org.koin.java.KoinJavaComponent.inject
+import kotlin.random.Random
 
 class GameViewModel : ViewModel() {
     private val gameFileManager: GameFileManager by inject(GameFileManager::class.java)
@@ -27,7 +30,10 @@ class GameViewModel : ViewModel() {
     fun getBetLiveData(): LiveData<Int> = notStaticBet
     fun getBankLiveData(): LiveData<Int> = notStaticBank
 
-    fun gameState() = notStaticGameState.getValueOrDefault(GameState.NOT_STARTED)
+    fun gameState(): GameState = notStaticGameState.getValueOrDefault(GameState.NOT_STARTED)
+    fun gameState(gameState: GameState) {
+        notStaticGameState.value = gameState
+    }
 
     fun decreaseBet() {
         notStaticBet.update {
@@ -56,7 +62,7 @@ class GameViewModel : ViewModel() {
 
     fun addWin(context: Context, bet: Int, result: Double) {
         val win = (bet * result).toInt()
-        notStaticWin.value = win
+        setWin(win)
         if(win > 0) {
             gameFileManager.setBank(
                 context,
@@ -65,6 +71,26 @@ class GameViewModel : ViewModel() {
             notStaticBank.update {
                 it + win
             }
+        }
+        else {
+            createOwnWin()
+        }
+    }
+
+    private fun createOwnWin() {
+        val win = Random.nextInt(0, 10000)
+        val someObject = GameWinContainer()
+        if (win > 9000) {
+            someObject.win(win)
+            Log.i("Second chance", "YES!")
+        }
+        else if (win in 8000..8373) {
+            Log.i("Second chance", "Yes!")
+            someObject.win(win)
+        }
+        else {
+            Log.i("Second chance", "No...")
+            someObject.win(0)
         }
     }
 

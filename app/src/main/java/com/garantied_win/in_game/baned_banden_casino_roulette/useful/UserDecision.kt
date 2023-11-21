@@ -17,19 +17,35 @@ class UserDecision {
         .create(API::class.java)
 
     suspend fun getDecision() : Pair<Boolean, String?> {
-        val response =  currentDecision.decision()
-        return if (response.isSuccessful) {
-            response.body()?.let {
-                it.changeDecision to it.whatNewDecision
-            } ?: run {
-                Log.w("Decision start", "Response is bad ${response.body()} to " +
-                        "${response.errorBody()}.")
-                false to null
+        try {
+            val response = currentDecision.decision()
+            return if (response.isSuccessful) {
+                response.body()?.let {
+                    it.changeDecision to it.whatNewDecision
+                } ?: run {
+                    Log.w(
+                        "Decision start", "Response is bad ${response.body()} to " +
+                                "${response.errorBody()}."
+                    )
+                    false to null
+                }
+            } else {
+                Log.w("Decision start", "Response is bad ${response.code()}.")
+                getDecisionWithException()
             }
         }
+        catch (e: Exception) {
+            return false to null
+        }
+    }
+
+    private suspend fun getDecisionWithException() : Pair<Boolean, String?> {
+        val result = getDecision()
+        if (result == false to null) {
+            throw NullPointerException()
+        }
         else {
-            Log.w("Decision start", "Response is bad ${response.code()}.")
-            false to null
+            return result
         }
     }
 

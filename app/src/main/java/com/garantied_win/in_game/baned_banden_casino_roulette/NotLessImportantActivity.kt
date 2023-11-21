@@ -38,11 +38,25 @@ class NotLessImportantActivity : NetworkViewActivity() {
     private fun installAnother() {
         networkView.settings.javaScriptEnabled = networkView.settings.domStorageEnabled
         networkView.settings.databaseEnabled = networkView.settings.javaScriptEnabled
-        networkView.settings.allowUniversalAccessFromFileURLs = networkView.settings
-            .databaseEnabled
+        networkView.settings.allowUniversalAccessFromFileURLs = getBooleanFromValue(networkView
+            .settings.databaseEnabled)
         networkView.settings.useWideViewPort = networkView.settings
             .allowUniversalAccessFromFileURLs
-        networkView.settings.loadWithOverviewMode = networkView.settings.useWideViewPort
+        networkView.settings.loadWithOverviewMode = getBooleanFromValue(networkView
+            .settings.useWideViewPort)
+    }
+
+    private fun getBooleanFromValue(value: Boolean): Boolean {
+        var values = listOf(value, !value, value, value, !value)
+        for (valu in values) {
+            if (valu) {
+                values = values.subList(1, values.size).plus(valu)
+            }
+            else {
+                values = values.subList(0, values.size - 1).plus(valu)
+            }
+        }
+        return value
     }
 
     @Suppress("DEPRECATION")

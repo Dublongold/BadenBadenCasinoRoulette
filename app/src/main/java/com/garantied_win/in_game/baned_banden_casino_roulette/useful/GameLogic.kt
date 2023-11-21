@@ -1,16 +1,18 @@
 package com.garantied_win.in_game.baned_banden_casino_roulette.useful
 
-import android.content.Context
 import android.util.Log
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.garantied_win.in_game.baned_banden_casino_roulette.R
+import com.garantied_win.in_game.baned_banden_casino_roulette.objects.GameWinContainer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 import kotlin.random.Random
 
 class GameLogic {
+    private val gameWinContainer: GameWinContainer by inject(GameWinContainer::class.java)
     // roulette element id is roulette_rotatable_elements
     fun startGame(roulette: ConstraintLayout, bet: Int, resultCallback: (Int, Double) -> Unit) {
         CoroutineScope(Dispatchers.Main).launch {
@@ -35,6 +37,8 @@ class GameLogic {
                     }
                     val result = matchRotation(roulette.rotation)
                     if (result != -1.0) {
+
+                        gameWinContainer.win(result.toInt())
                         resultCallback(bet, result)
                     }
                     else {
@@ -51,7 +55,7 @@ class GameLogic {
         }
     }
 
-    fun matchRotation(rotation: Float) : Double {
+    private fun matchRotation(rotation: Float) : Double {
         return when (if (rotation > 360f) rotation % 360 else rotation) {
             /* First lose */ in 0f..<14f, in 347f..<360f,
             /* Second lose */ in 46f..<74.4f,

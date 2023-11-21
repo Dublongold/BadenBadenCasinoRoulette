@@ -1,6 +1,7 @@
 package com.garantied_win.in_game.baned_banden_casino_roulette.fragments.with_view_model
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -52,9 +53,29 @@ class GameFragment : ParentFragment() {
                         }
                     }
                 }
+                else {
+                    doIfBankIsSmall()
+                }
             }
         }
         observeAllLiveDataFromViewModel()
+    }
+
+    private fun doIfBankIsSmall() {
+        if (viewModel.getBankLiveData().getValueOrDefault(-1) < 0) {
+            viewModel.gameState(GameState.FINISHED)
+            val gameStates = mutableListOf(
+                GameState.NOT_STARTED,
+                GameState.IN_PROCESS,
+                GameState.FINISHED,
+            )
+            if (gameStates.all {it.isNotNone()}) {
+                gameStates.add(0, GameState.NONE)
+            }
+            else {
+                Log.wtf(this::class.simpleName, "What?")
+            }
+        }
     }
 
     private fun observeAllLiveDataFromViewModel() {

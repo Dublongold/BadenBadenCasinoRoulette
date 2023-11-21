@@ -15,5 +15,18 @@ fun<T> MutableLiveData<T>.update(callback: (T) -> T) {
 }
 
 fun<T> LiveData<T>.getValueOrDefault(default: T) : T {
-    return value ?: default
+    return if (value == null) {
+        Log.i("Live data", "Has ${if(hasActiveObservers()) "" else "no "} observers.")
+        default
+    }
+    else {
+        val valueVal = value
+        if (valueVal != null) {
+            valueVal
+        }
+        else {
+            Log.i("Live data", "Value was not null. But now it's null. What?")
+            default
+        }
+    }
 }

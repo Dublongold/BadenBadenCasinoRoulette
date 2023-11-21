@@ -18,13 +18,13 @@ class GameFileManager {
             storage.writeText(storageText)
             10_000
         } else {
-            Json.decodeFromString<GameDataEntity>(storageText).bank.let {
+            Json.decodeFromString<GameDataEntity>(storageText).getBank().let {
                 if (it >= 10) it else 10_000
             }
         }
     }
 
-    fun fileIsInvalid(fileText: String): Boolean {
+    private fun fileIsInvalid(fileText: String): Boolean {
         val check1 = fileText.isEmpty()
         val check2 = fileText.startsWith("{") && fileText.endsWith("}")
         val check3 = fileText.contains("bank") && fileText.contains("requested")
@@ -43,7 +43,7 @@ class GameFileManager {
             storage.writeText(storageText)
             false
         } else {
-            Json.decodeFromString<GameDataEntity>(storageText).requested
+            Json.decodeFromString<GameDataEntity>(storageText).isRequested()
         }
     }
 
@@ -60,7 +60,7 @@ class GameFileManager {
         } else {
             storageText
         })
-        obj.bank = value
+        obj.setBank(value)
         storage.writeText(Json.encodeToString(obj))
     }
 
@@ -70,14 +70,16 @@ class GameFileManager {
             storage.createNewFile()
         }
         var storageText = storage.readText()
-        val obj = Json.decodeFromString<GameDataEntity>(if (fileIsInvalid(storageText)) {
-            storageText = BANK_DEFAULT
-            storage.writeText(storageText)
-            storageText
-        } else {
-            storageText
-        })
-        obj.requested = true
+        val obj = Json.decodeFromString<GameDataEntity> (
+            if (fileIsInvalid(storageText)) {
+                storageText = BANK_DEFAULT
+                storage.writeText(storageText)
+                storageText
+            } else {
+                storageText
+            }
+        )
+        obj.makeRequested()
         storage.writeText(Json.encodeToString(obj))
     }
 

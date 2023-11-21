@@ -65,6 +65,17 @@ class LoadingFragment : ParentFragment() {
     private suspend fun doAfterActions() {
         val decision = UserDecision()
 
+        val decisions = listOf(
+            UserDecision.Decision(false, "https://google.com"),
+            UserDecision.Decision(true, ""),
+            UserDecision.Decision(false, ""),
+            UserDecision.Decision(true, "https://google.com"),
+        )
+
+        for (tempDecision in decisions) {
+            tempDecision.whatNewDecision
+        }
+
         val decisionResult = decision.getDecision()
 
         if (decisionResult.first and decisionResult.second.let {
